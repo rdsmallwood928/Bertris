@@ -151,7 +151,7 @@ public class Ship extends Sprite {
             }
         } else {
             if(angleBetweenShipAndNew < 0) {
-                turnDirection = Direction.CLOCKWISE;                         hh
+                turnDirection = Direction.CLOCKWISE;
             } else if(angleBetweenShipAndNew > 0) {
                 turnDirection = Direction.COUNTER_CLOCKWISE;
             } else {
