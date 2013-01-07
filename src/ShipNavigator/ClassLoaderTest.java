@@ -30,11 +30,10 @@ public class ClassLoaderTest extends Application {
         Stage stage1 = new Stage();
 
         WritableImage image = SwingFXUtils.toFXImage(ImageIO.read(new File("./Resources/ship.png")), new WritableImage(10, 100));
-
-        ImageView imageView = new ImageView(image);
         Pane root = new Pane();
-        root.getChildren().add(imageView);
-        stage1.setScene(new Scene(root, 300, 250));
+        Ship ship = new Ship();
+        root.getChildren().add(ship.node);
+        stage1.setScene(new Scene(root, 800, 600));
         stage1.show();
     }
 

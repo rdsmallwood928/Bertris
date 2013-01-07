@@ -54,6 +54,7 @@ public abstract class GameWorldPresenter {
     public void beginGameLoop() {
         gameLoop.play();
     }
+
     private void setGameLoop(Timeline gameLoop) {
         this.gameLoop = gameLoop;
     }

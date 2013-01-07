@@ -24,6 +24,7 @@ public class NavigateShipPresenter extends GameWorldPresenter {
     @Override
     public void start(Stage primaryStage) {
         buildAndSetGameLoop();
+        beginGameLoop();
     }
 
     protected void handleUpdate(Sprite sprite) {
@@ -37,11 +38,8 @@ public class NavigateShipPresenter extends GameWorldPresenter {
 
     private void bounceOffWalls(Sprite sprite) {
         Node displayNode;
-        if (sprite instanceof Ship) {
-            displayNode = sprite.node;//((Ship)sprite).getCurrentShipImage();
-        } else {
-            displayNode = sprite.node;
-        }
+        displayNode = sprite.node;
+
         // Get the group node's X and Y but use the ImageView to obtain the width.
         if (sprite.node.getTranslateX() > (getForm().getGameSurface().getWidth() - displayNode.getBoundsInParent().getWidth()) ||
                 displayNode.getTranslateX() < 0) {

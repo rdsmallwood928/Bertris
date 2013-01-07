@@ -19,15 +19,14 @@ public class Vec {
         this.y = y;
     }
 
-    public Vec(double mx, double my, double centerX, double centerY) {
-        this.x = convertX(mx, centerX);
-        this.y = convertY(my, centerY);
-        this.mx = mx;
-        this.my = my;
+    public Vec(double destinationx, double destinationy, double centerX, double centerY) {
+        this.x = convertX(destinationx, centerX);
+        this.y = convertY(destinationy, centerY);
+        this.mx = destinationx;
+        this.my = destinationy;
     }
 
     public int quadrant() {
-        int q = 0;
         if(x > 0 && y > 0) {
             return 1;
         } else if (x < 0 && y > 0) {
@@ -45,8 +44,8 @@ public class Vec {
         return "(x:" + x + ", y:" + y + ") quadrant: " + quadrant()+")";
     }
 
-    public static double convertX(double mouseX, double originX) {
-        return mouseX - originX;
+    public static double convertX(double destinationX, double originX) {
+        return destinationX - originX;
     }
 
     public static double convertY(double mouseY, double originY) {

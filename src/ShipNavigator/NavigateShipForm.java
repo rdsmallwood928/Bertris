@@ -15,6 +15,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -51,7 +52,6 @@ public class NavigateShipForm extends Application implements IGameWorldForm {
             public void run() {
                 presenter = new NavigateShipPresenter(60, "Navigate Ship");
                 presenter.setForm(NavigateShipForm.this);
-                presenter.start(mainStage);
             }
         });
     }
@@ -61,13 +61,13 @@ public class NavigateShipForm extends Application implements IGameWorldForm {
         this.mainStage = stage;
         stage.setTitle(presenter.getWindowTitle());
         mainStage.setScene(getGameSurface());
+        mainStage.show();
         setupInput(mainStage);
-        presenter.beginGameLoop();
+        presenter.start(mainStage);
         List<Sprite> wrapper = new ArrayList<>();
         wrapper.add(myShip);
         presenter.getSpriteManager().addSprites(wrapper);
         getSceneNodes().getChildren().add(myShip.node);
-        mainStage.show();
     }
 
     private void setupInput(Stage mainStage) {
@@ -78,7 +78,7 @@ public class NavigateShipForm extends Application implements IGameWorldForm {
             public void handle(Event event) {
                 if(event instanceof MouseEvent) {
                     MouseEvent mouseEvent = (MouseEvent) event;
-                    mousePtLabel.setText("Mouse Press PT = (" + mouseEvent.getX() + ", " + mouseEvent.getY());
+                    System.out.println("Mouse Press PT = (" + mouseEvent.getX() + ", " + mouseEvent.getY() + ")");
                     if(mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                         myShip.plotCourse(mouseEvent.getX(), mouseEvent.getY(), false);
                         Missile missile = myShip.fire();
@@ -90,16 +90,20 @@ public class NavigateShipForm extends Application implements IGameWorldForm {
                         if(presenter.getSpriteManager().getAllSprites().size() <= 1) {
                             generateManySpheres(30);
                         }
-
                         myShip.applyTheBrakes(mouseEvent.getX(), mouseEvent.getY());
                         myShip.plotCourse(mouseEvent.getX(), mouseEvent.getY(), true);
                     }
 
                 }
+                if(event instanceof KeyEvent) {
+                    KeyEvent keyEvent = (KeyEvent) event;
+                    System.out.println(keyEvent.getCharacter());
+                }
             }
         };
 
         mainStage.getScene().setOnMousePressed(fireOrMove);
+        mainStage.getScene().setOnKeyPressed(fireOrMove);
 
 /*        EventHandler changeWeapons = new EventHandler<KeyEvent>() {
             @Override
@@ -110,14 +114,14 @@ public class NavigateShipForm extends Application implements IGameWorldForm {
             }
         }*/
 
-        EventHandler showMouseMove = new EventHandler<MouseEvent>() {
+/*        EventHandler showMouseMove = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 mousePtLabel.setText("Mouse PT = (" + event.getX() + ", " + event.getY() + ")");
             }
         };
 
-        mainStage.getScene().setOnMouseMoved(showMouseMove);
+        mainStage.getScene().setOnMouseMoved(showMouseMove);*/
     }
 
     private void generateManySpheres(int numSpheres) {
@@ -185,7 +189,9 @@ public class NavigateShipForm extends Application implements IGameWorldForm {
     @Override
     public Scene getGameSurface() {
         if(mainScene == null) {
-            mainScene = new Scene(getSceneNodes(), 800, 600);
+            Pane pane = new Pane();
+            mainScene = new Scene(pane, 800, 600);
+            pane.getChildren().add(getSceneNodes());
             mainScene.setFill(Color.BLACK);
         }
         return mainScene;

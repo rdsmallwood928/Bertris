@@ -1,16 +1,15 @@
 package ShipNavigator;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TimelineBuilder;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -20,12 +19,10 @@ import library.Vec;
 import main.sprites.Sprite;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created with IntelliJ IDEA.
@@ -51,8 +48,8 @@ public class Ship extends Sprite {
     private Vec shipVector;
     private final List<RotatedShipImage> directionalShips = new ArrayList<>(NUM_DIRECTIONS);
     private Timeline rotatedShipTimeLine;
-    private int uIndex = 0;
-    private int vIndex = 0;
+    private int startShipAnimationIndex = 0;
+    private int endShipAnimationIndex = 0;
     private final Circle stopArea = new Circle();
     private final Group flipBook = new Group();
     private KeyCode keyCode;
@@ -60,10 +57,7 @@ public class Ship extends Sprite {
     public Ship() {
         WritableImage shipImage = null;
         try {
-            File file = new File("./Resources/ship.png");
-            BufferedImage bufferedImage = ImageIO.read(file);
-            shipImage = new WritableImage(bufferedImage.getHeight(),bufferedImage.getWidth());
-            SwingFXUtils.toFXImage(ImageIO.read(file),shipImage);
+            shipImage = SwingFXUtils.toFXImage(ImageIO.read(new File("./Resources/ship.png")), new WritableImage(10, 100));
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -96,7 +90,7 @@ public class Ship extends Sprite {
     }
 
     private RotatedShipImage getCurrentShipImage() {
-        return directionalShips.get(uIndex);
+        return directionalShips.get(startShipAnimationIndex);
     }
 
     @Override
@@ -109,24 +103,23 @@ public class Ship extends Sprite {
         }
     }
 
-    public double getCenterX() {
+    public Double getCenterX() {
         RotatedShipImage shipImage = getCurrentShipImage();
         return node.getTranslateX() + (shipImage.getBoundsInLocal().getWidth()/2);
     }
 
-    public double getCenterY() {
+    public Double getCenterY() {
         RotatedShipImage shipImage = getCurrentShipImage();
         return node.getTranslateY() + (shipImage.getBoundsInLocal().getHeight()/2);
     }
 
     public void plotCourse(double screenX, double screenY, boolean thrust) {
-        double sx = getCenterX();
-        double sy = getCenterY();
-
-        Vec newVector = new Vec(screenX, screenY, sx, sy);
+        Vec newVector = new Vec(screenX, screenY, getCenterX(), getCenterY());
         if(shipVector == null) {
-            shipVector = new Vec(1,0);
+            shipVector = new Vec(Float.parseFloat(getCenterX().toString()),Float.parseFloat(getCenterY().toString()));
         }
+
+        System.out.println("Vector is: " + shipVector);
 
         double atan2RadiansShip = Math.atan2(shipVector.y, shipVector.x);
         double atan2DegreesShip = Math.toDegrees(atan2RadiansShip);
@@ -164,26 +157,27 @@ public class Ship extends Sprite {
             degreesToMove = TWO_PI_DEGREES - absAngelBetweenShipAndNew;
         }
 
-        uIndex = Math.round((float)(atan2DegreesShip/UNIT_ANGLE_PER_FRAME));
-        if(uIndex < 0) {
-            uIndex = NUM_DIRECTIONS + uIndex;
+
+        startShipAnimationIndex = Math.round((float)(atan2DegreesShip/UNIT_ANGLE_PER_FRAME));
+        if(startShipAnimationIndex < 0) {
+            startShipAnimationIndex = NUM_DIRECTIONS + startShipAnimationIndex;
         }
-        vIndex = Math.round((float)(atan2DegreesNew/UNIT_ANGLE_PER_FRAME));
-        if(vIndex < 0) {
-            vIndex = NUM_DIRECTIONS + vIndex;
+        endShipAnimationIndex = Math.round((float)(atan2DegreesNew/UNIT_ANGLE_PER_FRAME));
+        if(endShipAnimationIndex < 0) {
+            endShipAnimationIndex = NUM_DIRECTIONS + endShipAnimationIndex;
         }
 
         if(thrust) {
-            vX = Math.cos(atan2DegreesShip) * THRUST_AMOUNT;
-            vY = -Math.sin(atan2DegreesShip) * THRUST_AMOUNT;
+            vX = Math.cos(atan2DegreesNew) * THRUST_AMOUNT;
+            vY = -Math.sin(atan2DegreesNew) * THRUST_AMOUNT;
         }
         turnShip();
     }
 
     private void turnShip() {
         final Duration oneFrameAmt = Duration.millis(MILLIS_PER_FRAME);
-        RotatedShipImage startImage = directionalShips.get(uIndex);
-        RotatedShipImage endImage = directionalShips.get(vIndex);
+        RotatedShipImage startImage = directionalShips.get(startShipAnimationIndex);
+        RotatedShipImage endImage = directionalShips.get(endShipAnimationIndex);
 
         List<KeyFrame> frames = new ArrayList<KeyFrame>();
 
@@ -220,6 +214,7 @@ public class Ship extends Sprite {
         } else {
             rotatedShipTimeLine = TimelineBuilder.create().keyFrames(frames).build();
         }
+        rotatedShipTimeLine.playFromStart();
     }
 
     public void applyTheBrakes(double screenX, double screenY) {
@@ -237,10 +232,10 @@ public class Ship extends Sprite {
             missile = new Missile(Color.RED);
         }
 
-        missile.vX = Math.cos(Math.toRadians(uIndex * UNIT_ANGLE_PER_FRAME)) *(MISSLE_THRUST_AMOUNT - slowDownAmount);
-        missile.vY = -Math.sin(Math.toRadians(uIndex * UNIT_ANGLE_PER_FRAME)) *(MISSLE_THRUST_AMOUNT - slowDownAmount);
+        missile.vX = Math.cos(Math.toRadians(startShipAnimationIndex * UNIT_ANGLE_PER_FRAME)) *(MISSLE_THRUST_AMOUNT - slowDownAmount);
+        missile.vY = -Math.sin(Math.toRadians(startShipAnimationIndex * UNIT_ANGLE_PER_FRAME)) *(MISSLE_THRUST_AMOUNT - slowDownAmount);
 
-        RotatedShipImage shipImage = directionalShips.get(uIndex);
+        RotatedShipImage shipImage = directionalShips.get(startShipAnimationIndex);
 
         double offsetX = (shipImage.getBoundsInLocal().getWidth() - missile.node.getBoundsInLocal().getWidth()) / 2;
         double offsetY = (shipImage.getBoundsInLocal().getHeight() - missile.node.getBoundsInLocal().getHeight()) /2;
