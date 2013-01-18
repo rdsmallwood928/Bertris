@@ -1,6 +1,7 @@
 package main.sprites;
 
 import javafx.scene.Node;
+import main.GameWorldPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,19 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class Sprite {
+
+
+    final protected SpriteType type;
+
     private List animations = new ArrayList<>();
+
+    public Sprite(SpriteType type) {
+        this.type = type;
+    }
+
+    public SpriteType getType() {
+        return type;
+    }
 
     public Node node;
 
@@ -28,4 +41,6 @@ public abstract class Sprite {
     public boolean collide(Sprite other) {
         return false;
     }
+
+    public abstract void implode(final GameWorldPresenter presenter);
 }

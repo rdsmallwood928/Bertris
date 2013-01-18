@@ -74,7 +74,7 @@ public abstract class GameWorldPresenter {
         for(Sprite sprite : spriteManager.getCollisionsToCheck()) {
             for(Sprite spriteB : spriteManager.getAllSprites()) {
                 if(handleCollision(sprite, spriteB)) {
-                    break;
+
                 }
             }
         }

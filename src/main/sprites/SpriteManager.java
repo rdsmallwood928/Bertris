@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,7 +15,7 @@ import java.util.Set;
  */
 public class SpriteManager {
 
-    private final List<Sprite> gameActors = new ArrayList<>();
+    private final List<Sprite> gameActors = new CopyOnWriteArrayList<>();
     private final List<Sprite> checkCollisionList = new ArrayList<>();
     private final Set<Sprite> cleanUpSprites = new HashSet<>();
 

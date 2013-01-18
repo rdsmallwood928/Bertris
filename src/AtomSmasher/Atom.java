@@ -1,5 +1,7 @@
 package AtomSmasher;
 
+import ShipNavigator.Missile;
+import ShipNavigator.Ship;
 import javafx.animation.FadeTransitionBuilder;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,6 +14,7 @@ import javafx.scene.shape.CircleBuilder;
 import javafx.util.Duration;
 import main.GameWorldPresenter;
 import main.sprites.Sprite;
+import main.sprites.SpriteType;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,6 +26,7 @@ import main.sprites.Sprite;
 public class Atom extends Sprite {
 
     public Atom(double radius, Color fill, boolean gradiantFill) {
+        super(SpriteType.ATOM);
         Circle sphere = CircleBuilder.create()
                 .centerX(radius)
                 .centerY(radius)
@@ -59,10 +63,24 @@ public class Atom extends Sprite {
 
     @Override
     public boolean collide(Sprite other) {
+        if(other instanceof Missile) {
+            return doCirclesCollide(((Missile)other).getAsCircle(), getAsCircle());
+        }
+        if (other instanceof Ship) {
+            return doCirclesCollide(((Ship)other).getAsCircle(), getAsCircle());
+        }
         if (other instanceof Atom) {
             return collide((Atom)other);
         }
         return false;
+    }
+
+    private boolean doCirclesCollide(Circle one, Circle two) {
+        double dx = two.getTranslateX() - one.getTranslateX();
+        double dy = two.getTranslateY() - one.getTranslateY();
+        double distance = Math.sqrt( dx * dx + dy * dy );
+        double minDist  = two.getRadius() + one.getRadius() + 3;
+        return (distance < minDist);
     }
 
     /**

@@ -1,5 +1,6 @@
 package ShipNavigator;
 
+import AtomSmasher.Atom;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import main.GameWorldPresenter;
@@ -67,5 +68,33 @@ public class NavigateShipPresenter extends GameWorldPresenter {
             getSpriteManager().addSpritesToBeRemoved(wrapper);
             getSceneNodes().getChildren().remove(missile.node);
         }
+    }
+
+    @Override
+    protected boolean handleCollision(Sprite sprite, Sprite otherSprite) {
+        if(sprite.collide(otherSprite)) {
+            sprite.implode(this);
+            otherSprite.implode(this);
+            ArrayList<Sprite> wrapper = new ArrayList<Sprite>();
+            handleSpriteType(sprite,wrapper);
+            handleSpriteType(otherSprite, wrapper);
+            getSpriteManager().addSpritesToBeRemoved(wrapper);
+            return true;
+        }
+        return false;
+    }
+
+    private void handleSpriteType(Sprite sprite, ArrayList<Sprite> wrapper) {
+        switch (sprite.getType()) {
+            case SHIP:
+                break;
+            default:
+                wrapper.add(sprite);
+                break;
+        }
+    }
+
+    public void hurtShip() {
+        getForm().updateLabels();
     }
 }
