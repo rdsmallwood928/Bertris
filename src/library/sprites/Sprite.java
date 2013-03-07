@@ -1,7 +1,6 @@
-package main.sprites;
+package library.sprites;
 
 import javafx.scene.Node;
-import main.GameWorldPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +15,15 @@ import java.util.List;
 public abstract class Sprite {
 
 
-    final protected SpriteType type;
+    final protected BlockType type;
 
     private List animations = new ArrayList<>();
 
-    public Sprite(SpriteType type) {
+    public Sprite(BlockType type) {
         this.type = type;
     }
 
-    public SpriteType getType() {
+    public BlockType getType() {
         return type;
     }
 
@@ -42,5 +41,5 @@ public abstract class Sprite {
         return false;
     }
 
-    public abstract void implode(final GameWorldPresenter presenter);
+    public abstract void implode();
 }

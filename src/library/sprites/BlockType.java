@@ -1,4 +1,4 @@
-package main.sprites;
+package library.sprites;
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,6 +7,6 @@ package main.sprites;
  * Time: 5:33 PM
  * To change this template use File | Settings | File Templates.
  */
-public enum SpriteType {
-    SHIP, ATOM, MISSILE
+public enum BlockType{
+    TBLOCK, LINEBLOCK, SQUAREBLOCK, SQUIGLYBLOCK, INVERSESQUIGLYBLOCK, LBLOCK, INVERSELBLOCK;
 }

@@ -9,8 +9,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import main.sprites.Sprite;
-import main.sprites.SpriteManager;
+import library.sprites.Sprite;
+import library.sprites.SpriteManager;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +19,9 @@ import main.sprites.SpriteManager;
  * Time: 7:06 PM
  * To change this template use File | Settings | File Templates.
  */
+
+
+//This is becoming legacy, as I feel its better to just leave everything in the view on the EDT thread.
 public abstract class GameWorldPresenter {
 
     private GameWorldModel model;
@@ -30,7 +33,7 @@ public abstract class GameWorldPresenter {
 
     public GameWorldPresenter(int fps, String title) {
         this.model = new GameWorldModel(fps, title);
-        this.spriteManager = new SpriteManager();
+        this.spriteManager = new SpriteManager(null);
     }
 
     public void setForm(IGameWorldForm form) {

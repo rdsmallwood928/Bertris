@@ -56,4 +56,9 @@ public class DefaultGameWorldForm extends Application implements IGameWorldForm{
     public void updateLabels() {
         //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    public void buildAndSetGameLoop() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

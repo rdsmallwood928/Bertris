@@ -8,8 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import main.GameWorldPresenter;
-import main.sprites.Sprite;
-import main.sprites.SpriteType;
+import library.sprites.Sprite;
 
 /**
  * Created with IntelliJ IDEA.

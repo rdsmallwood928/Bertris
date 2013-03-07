@@ -16,9 +16,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import library.Vec;
-import main.GameWorldPresenter;
-import main.sprites.Sprite;
-import main.sprites.SpriteType;
+import library.sprites.BlockType;
+import library.sprites.Sprite;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -58,7 +57,7 @@ public class Ship extends Sprite {
     private KeyCode keyCode;
 
     public Ship() {
-        super(SpriteType.SHIP);
+        super(BlockType.TBLOCK);
         WritableImage shipImage = null;
         try {
             shipImage = SwingFXUtils.toFXImage(ImageIO.read(new File("./Resources/ship.png")), new WritableImage(10, 100));
@@ -109,7 +108,7 @@ public class Ship extends Sprite {
     }
 
     @Override
-    public void implode(final GameWorldPresenter presenter) {
+    public void implode() {
         shipHealth = shipHealth-.2;
         if(shipHealth < 0) {
             vX = vY = 0;
@@ -122,13 +121,13 @@ public class Ship extends Sprite {
                         @Override
                         public void handle(ActionEvent arg0) {
                             isDead = true;
-                            presenter.getSceneNodes().getChildren().remove(node);
+                            //presenter.getSceneNodes().getChildren().remove(node);
                         }
                     })
                     .build()
                     .play();
         }
-        ((NavigateShipPresenter)presenter).hurtShip();
+        //((NavigateShipPresenter)presenter).hurtShip();
     }
 
     public Double getCenterX() {

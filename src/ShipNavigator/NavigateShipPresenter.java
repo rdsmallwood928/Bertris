@@ -1,10 +1,9 @@
 package ShipNavigator;
 
-import AtomSmasher.Atom;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import main.GameWorldPresenter;
-import main.sprites.Sprite;
+import library.sprites.Sprite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,8 +72,8 @@ public class NavigateShipPresenter extends GameWorldPresenter {
     @Override
     protected boolean handleCollision(Sprite sprite, Sprite otherSprite) {
         if(sprite.collide(otherSprite)) {
-            sprite.implode(this);
-            otherSprite.implode(this);
+            sprite.implode();
+            otherSprite.implode();
             ArrayList<Sprite> wrapper = new ArrayList<Sprite>();
             handleSpriteType(sprite,wrapper);
             handleSpriteType(otherSprite, wrapper);
@@ -86,7 +85,7 @@ public class NavigateShipPresenter extends GameWorldPresenter {
 
     private void handleSpriteType(Sprite sprite, ArrayList<Sprite> wrapper) {
         switch (sprite.getType()) {
-            case SHIP:
+            case TBLOCK:
                 break;
             default:
                 wrapper.add(sprite);

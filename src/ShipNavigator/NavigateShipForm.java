@@ -1,41 +1,32 @@
 package ShipNavigator;
 
 import AtomSmasher.Atom;
-import com.sun.deploy.xml.XMLable;
-import com.sun.javafx.tk.FontMetrics;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.HBoxBuilder;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import library.sprites.BlockType;
 import main.IGameWorldForm;
-import main.sprites.Sprite;
-import main.sprites.SpriteType;
+import library.sprites.Sprite;
 
-import java.awt.*;
-import java.awt.font.FontRenderContext;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -89,7 +80,7 @@ public class NavigateShipForm extends Application implements IGameWorldForm {
 
         HBox hBox = hBoxBuilder.build();
         getSceneNodes().getChildren().add(hBox);
-        generateManySpheres(100);
+        generateManySpheres(10);
     }
 
     private void setupInput(Stage mainStage) {
@@ -120,7 +111,7 @@ public class NavigateShipForm extends Application implements IGameWorldForm {
         };
 
         mainStage.getScene().setOnMousePressed(fireOrMove);
-        mainStage.getScene().setOnKeyPressed(fireOrMove);
+        mainStage.getScene().setOnKeyReleased(fireOrMove);
 
 /*        EventHandler changeWeapons = new EventHandler<KeyEvent>() {
             @Override
@@ -224,10 +215,10 @@ public class NavigateShipForm extends Application implements IGameWorldForm {
 
     @Override
     public void updateLabels() {
-        for(Sprite sprite : presenter.getSpriteManager().getAllSprites()) {
-            if(sprite.getType().equals(SpriteType.SHIP)) {
-                double health = ((Ship)sprite).getShipHealth();
-                if(health > 0) {
+        for(Sprite sprite : presenter.getSpriteManager().getAllSprites())
+            if (sprite.getType().equals(BlockType.TBLOCK)) {
+                double health = ((Ship) sprite).getShipHealth();
+                if (health > 0) {
                     healthBar.setProgress(health);
                 } else {
                     Label gameOver = new Label("GAME OVER");
@@ -237,21 +228,29 @@ public class NavigateShipForm extends Application implements IGameWorldForm {
                     gameOver.setFont(font);
                     Text text = new Text(gameOver.getText());
                     text.snapshot(null, null);
-                    //getSceneNodes().getChildren().add(gameOver);
+                    VBoxBuilder builder = VBoxBuilder.create();
+                    Button restart = new Button("Play again");
+                    restart.setOnMouseClicked(new EventHandler() {
+                        @Override
+                        public void handle(Event event) {
+                            System.out.println("restart");
+                        }
+                    });
+                    builder.children(gameOver, restart);
                     double width = text.getLayoutBounds().getWidth();
                     double height = text.getLayoutBounds().getHeight();
-                    gameOver.setTranslateX((mainScene.getWidth()/2) - width);
-                    gameOver.setTranslateY((mainScene.getHeight()/2) - height);
-/*                    Circle circle = new Circle(10);
-                    circle.setFill(Color.BLUE);
-                    circle.setTranslateX(mainScene.getWidth()/2 - width/2);
-                    circle.setTranslateY(mainScene.getHeight()/2 - height/2);*/
-                    getSceneNodes().getChildren().add(gameOver);
+                    gameOver.setTranslateX((mainScene.getWidth() / 2) - width);
+                    gameOver.setTranslateY((mainScene.getHeight() / 2) - height);
+                    getSceneNodes().getChildren().add(builder.build());
                     List wrapper = new ArrayList();
                     wrapper.add(sprite);
                     presenter.getSpriteManager().removeSprites(wrapper);
                 }
             }
-        }
+    }
+
+    @Override
+    public void buildAndSetGameLoop() {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

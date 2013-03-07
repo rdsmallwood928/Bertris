@@ -2,7 +2,7 @@ package AtomSmasher;
 
 import javafx.stage.Stage;
 import main.GameWorldPresenter;
-import main.sprites.Sprite;
+import library.sprites.Sprite;
 
 import java.util.ArrayList;
 
@@ -43,8 +43,8 @@ public class AtomSmasherPresenter extends GameWorldPresenter {
 
     protected boolean handleCollision(Sprite spriteA, Sprite spriteB) {
         if(spriteA.collide(spriteB)) {
-            ((Atom)spriteA).implode(this);
-            ((Atom)spriteB).implode(this);
+            ((Atom)spriteA).implode();
+            ((Atom)spriteB).implode();
             ArrayList<Sprite> wrapper = new ArrayList<Sprite>();
             wrapper.add(spriteA);
             wrapper.add(spriteB);

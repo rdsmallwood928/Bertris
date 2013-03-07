@@ -12,9 +12,8 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.CircleBuilder;
 import javafx.util.Duration;
-import main.GameWorldPresenter;
-import main.sprites.Sprite;
-import main.sprites.SpriteType;
+import library.sprites.BlockType;
+import library.sprites.Sprite;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,7 +25,7 @@ import main.sprites.SpriteType;
 public class Atom extends Sprite {
 
     public Atom(double radius, Color fill, boolean gradiantFill) {
-        super(SpriteType.ATOM);
+        super(BlockType.TBLOCK);
         Circle sphere = CircleBuilder.create()
                 .centerX(radius)
                 .centerY(radius)
@@ -117,11 +116,7 @@ public class Atom extends Sprite {
         return (Circle) node;
     }
 
-    /**
-     * Animate an implosion. Once done remove from the game world
-     * @param gameWorld - game world
-     */
-    public void implode(final GameWorldPresenter gameWorld) {
+    public void implode() {
         vX = vY = 0;
         FadeTransitionBuilder.create()
                 .node(node)
@@ -132,7 +127,7 @@ public class Atom extends Sprite {
                     @Override
                     public void handle(ActionEvent arg0) {
                         isDead = true;
-                        gameWorld.getSceneNodes().getChildren().remove(node);
+                        //gameWorld.getSceneNodes().getChildren().remove(node);
                     }
                 })
                 .build()

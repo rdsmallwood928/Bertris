@@ -15,7 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import main.IGameWorldForm;
-import main.sprites.Sprite;
+import library.sprites.Sprite;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -152,6 +152,11 @@ public class AtomSmasherForm extends Application implements IGameWorldForm {
     @Override
     public void updateLabels() {
         numSpritesLabel.setText(String.valueOf(presenter.getSpriteManager().getAllSprites().size()));
+    }
+
+    @Override
+    public void buildAndSetGameLoop() {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
 

@@ -15,4 +15,5 @@ public interface IGameWorldForm {
     public Group getSceneNodes();
     public Scene getGameSurface();
     public void updateLabels();
+    public void buildAndSetGameLoop();
 }
